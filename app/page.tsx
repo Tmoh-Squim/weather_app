@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "./components/Loader";
 
 const GEO_API_URL =
   "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records";
@@ -130,7 +131,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black p-6">
-      <h1 className="text-3xl font-bold mb-6">Weather Forecast</h1>
+      <h1 className="text-5xl font-bold mb-6">Weather Forecast</h1>
 
       {/* Search Input */}
       <div className="relative w-96">
@@ -144,7 +145,9 @@ export default function Home() {
 
         {/* Loading Animation */}
         {loading && (
-          <div className="absolute right-3 top-2.5 w-5 h-5 border-2 border-gray-300 border-t-teal-500 rounded-full animate-spin"></div>
+          <div className="absolute right-3 top-2.5">
+            <Loader />
+          </div>
         )}
 
         {/* Search Results Dropdown */}
@@ -166,8 +169,8 @@ export default function Home() {
       {/* Table (Initial Cities) */}
       <div className="w-full max-w-4xl mt-6">
         {loading && (
-          <div className="text-center text-teal-500 animate-pulse">
-            Loading cities...
+          <div className="text-center">
+            <Loader />
           </div>
         )}
 
@@ -204,7 +207,12 @@ export default function Home() {
       {/* Weather Popup */}
       {isPopupOpen && weather && selectedCity && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center relative">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center relative"
+          style={{
+            backgroundImage: `url(${weather.icon})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}>
             <button
               className="absolute top-2 right-2 text-gray-600"
               onClick={() => setIsPopupOpen(false)}
@@ -213,7 +221,6 @@ export default function Home() {
             </button>
             <h2 className="text-2xl font-bold mb-2">{selectedCity.name}</h2>
             <p>{selectedCity.country}</p>
-            <img src={weather.icon} alt="Weather icon" className="mx-auto" />
             <h3 className="text-4xl font-bold">{weather.temperature}°C</h3>
             <p>{weather.condition}</p>
             <p>Humidity: {weather.humidity}%</p>
