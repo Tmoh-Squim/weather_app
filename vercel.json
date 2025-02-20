@@ -1,0 +1,9 @@
+{
+    "crons": [
+      {
+        "path": "/api/notifyUser",
+        "schedule": "0 6 * * *"
+      }
+    ]
+  }
+  

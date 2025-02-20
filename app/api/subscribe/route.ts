@@ -1,3 +1,4 @@
+import { ConnectDB } from "@/server/config/Db";
 import Users from "@/server/models/users";
 import { NextResponse } from "next/server";
 
@@ -17,7 +18,8 @@ export async function POST(req:Request){
                 message:"Weather is required"
             })
         }
-        const existingEmail = await Users.find({email:email});
+        await ConnectDB();
+        const existingEmail = await Users.findOne({email});
         if(existingEmail){
             return NextResponse.json({
                 success:false,
@@ -36,6 +38,7 @@ export async function POST(req:Request){
             message:`You have successfully subscribed to get weathear notification during ${weather} forecast`
         })
     } catch (error) {
+        console.log('first',error)
         return NextResponse.json({
             success:false,
             message:"Internal server error"
