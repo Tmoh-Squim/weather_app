@@ -83,7 +83,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black md:p-6 p-2">
       <h1 className="800px:text-5xl text-3xl font-bold mb-6">Weather Forecast</h1>
 
       {/* Search Input */}
@@ -91,7 +91,7 @@ export default function Home() {
         <input
           type="text"
           placeholder="Search with city name..."
-          className="w-full p-3 border rounded-full shadow-sm text-black"
+          className="w-full p-3 border rounded-3xl shadow-sm text-black"
           onChange={(e) => handleSearch(e.target.value)}
           value={query}
         />

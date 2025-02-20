@@ -19,7 +19,7 @@ const ForecastItem = memo(
           })
         )}
       </span>
-      <span className="block text-2xl font-bold">
+      <span className="block text-2xl text-black font-bold">
         {loading ? (
           <Shimmer width="40px" height="24px" />
         ) : (
@@ -83,7 +83,8 @@ const WeatherPage = () => {
     weather?.list?.filter((_: any, index: number) => index % 8 === 0) || [];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="h-screen w-full flex justify-center bg-gray-200 items-center">
+    <div className="max-w-4xl mx-auto md:p-6 py-6 px-2 bg-gray-100 shadow-md rounded-lg">
       {/* Header */}
       <div className="flex justify-between items-center border-b pb-4 mb-4">
         <h2 className="text-2xl font-bold text-gray-800">
@@ -104,7 +105,7 @@ const WeatherPage = () => {
       </div>
 
       {/* Current Weather Section */}
-      <div className="flex justify-between items-center my-6">
+      <div className="flex justify-between gap-4 items-center my-6">
         {/* Weather Icon & Temperature */}
         <div className="text-center">
           {status === "loading" ? (
@@ -116,12 +117,12 @@ const WeatherPage = () => {
               className="w-32 h-32 mx-auto"
             />
           )}
-          <h1 className="text-6xl font-extrabold text-gray-900">
+          <h1 className="md:text-6xl text-4xl mt-2 font-extrabold text-gray-900">
             {status === "loading" ? (
               <Shimmer width="80px" height="48px" />
             ) : (
-              `${Math.round(currentWeather.main?.temp || 0)}°C`
-            )}
+              `${Math.round(currentWeather.main?.temp || 0)}°`
+            )}<span className="text-[28px] font-normal">c</span>
           </h1>
           <span className="text-lg text-gray-600 capitalize">
             {status === "loading" ? (
@@ -162,6 +163,7 @@ const WeatherPage = () => {
           <ForecastItem key={index} day={day} loading={status === "loading"} />
         ))}
       </div>
+    </div>
     </div>
   );
 };
