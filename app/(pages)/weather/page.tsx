@@ -7,7 +7,7 @@ import { FORECAST_API_URL, WEATHER_API_KEY } from "@/app/apis/apis";
 import { Shimmer } from "@/app/components/LoadindShimmer";
 
 const ForecastItem = memo(({ day, loading }: { day: any; loading: boolean }) => (
-  <div className="p-4 border border-gray-300 rounded-lg shadow-sm">
+  <div className="p-4 w-[100px] border border-gray-300 rounded-lg shadow-sm">
     <span className="block text-teal-600 font-semibold">
       {loading ? (
         <Shimmer width="60px" height="16px" />
@@ -27,7 +27,7 @@ const ForecastItem = memo(({ day, loading }: { day: any; loading: boolean }) => 
 ));
 
 const HourlyForecastItem = memo(({ hour, loading }: { hour: any; loading: boolean }) => (
-  <div className="p-2 border border-gray-300 rounded-lg shadow-sm text-center">
+  <div className="p-2 w-[100px] border border-gray-300 rounded-lg shadow-sm text-center">
     <span className="block text-black font-semibold">
       {loading ? <Shimmer width="50px" height="16px" /> : new Date(hour.dt * 1000).toLocaleTimeString("en-US", { hour: "numeric", hour12: true })}
     </span>
@@ -81,8 +81,8 @@ const WeatherPage = () => {
 
   return (
     <div className="h-screen w-full flex justify-center bg-white items-center">
-      <div className="flex gap-2 justify-center items-center">
-      <div className="max-w-2xl mx-auto md:p-6 py-6 px-2 my-6 bg-neutral-50 shadow-md rounded-lg">
+      <div className="lg:flex gap-2 justify-center items-center">
+      <div className="max-w-4xl mx-auto md:p-6 py-6 px-2 my-6 bg-neutral-50 shadow-md rounded-lg">
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-4 mb-4">
           <h2 className="text-2xl font-bold text-gray-800">
@@ -124,16 +124,16 @@ const WeatherPage = () => {
         </div>
 
         {/* 5-Day Forecast Section */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-center">
+        <div className="flex justify-between lg:gap-10 gap-2 flex-wrap w-full text-center">
           {dailyForecast.map((day: any, index: number) => (
             <ForecastItem key={index} day={day} loading={status === "loading"} />
           ))}
         </div>
       </div>
-        <div className="block bg-white">
+        <div className="block bg-white px-2">
         {/* Hourly Forecast Section */}
         <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">Hourly Forecast (Next 24 Hours)</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-6 lg:grid-cols-3 gap-2 text-center overflow-x-auto">
+        <div className="lg:grid grid-cols-3 flex flex-wrap justify-between gap-2 text-center ">
           {hourlyForecast.map((hour: any, index: number) => (
             <HourlyForecastItem key={index} hour={hour} loading={status === "loading"} />
           ))}
