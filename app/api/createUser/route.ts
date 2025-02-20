@@ -1,0 +1,44 @@
+import Users from "@/server/models/users";
+import { NextResponse } from "next/server";
+
+export async function POST(req:Request){
+    try {
+        const {email,weather,lat,lon} = await req.json();
+
+        if(!email){
+            return NextResponse.json({
+                success:false,
+                message:"Email is required"
+            })
+        }
+        if(!weather){
+            return NextResponse.json({
+                success:false,
+                message:"Weather is required"
+            })
+        }
+        const existingEmail = await Users.find({email:email});
+        if(existingEmail){
+            return NextResponse.json({
+                success:false,
+                message:"You have already subscribe to get notifications"
+            })
+        }
+        const newUser = {
+            email:email,
+            lat:lat,
+            lon:lon,
+            weather:weather
+        }
+        await Users.create(newUser);
+        return NextResponse.json({
+            success:true,
+            message:`You have successfully subscribed to get weathear notification during ${weather} forecast`
+        })
+    } catch (error) {
+        return NextResponse.json({
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}

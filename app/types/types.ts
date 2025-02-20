@@ -13,4 +13,9 @@ export interface Weather {
     condition: string;
     icon: string;
   }
-  
+
+export interface MailProps {
+    email:string,
+    subject:string,
+    message:string
+}
