@@ -1,53 +1,20 @@
 "use client";
-
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { FORECAST_API_URL, WEATHER_API_KEY } from "@/app/apis/apis";
-import { Shimmer } from "@/app/components/LoadindShimmer";
-
-const ForecastItem = memo(({ day, loading }: { day: any; loading: boolean }) => (
-  <div className="p-4 w-[100px] border border-gray-300 rounded-lg shadow-sm">
-    <span className="block text-teal-600 font-semibold">
-      {loading ? (
-        <Shimmer width="60px" height="16px" />
-      ) : (
-        new Date(day.dt * 1000).toLocaleDateString("en-US", {
-          weekday: "short",
-        })
-      )}
-    </span>
-    <span className="block text-2xl text-black font-bold">
-      {loading ? <Shimmer width="40px" height="24px" /> : `${Math.round(day.main?.temp || 0)}°C`}
-    </span>
-    <span className="block text-gray-500 capitalize">
-      {loading ? <Shimmer width="80px" height="16px" /> : day.weather?.[0]?.description}
-    </span>
-  </div>
-));
-
-const HourlyForecastItem = memo(({ hour, loading }: { hour: any; loading: boolean }) => (
-  <div className="p-2 w-[100px] border border-gray-300 rounded-lg shadow-sm text-center">
-    <span className="block text-black font-semibold">
-      {loading ? <Shimmer width="50px" height="16px" /> : new Date(hour.dt * 1000).toLocaleTimeString("en-US", { hour: "numeric", hour12: true })}
-    </span>
-    <span className="block text-lg font-bold text-gray-400">
-      {loading ? <Shimmer width="40px" height="20px" /> : `${Math.round(hour.main?.temp || 0)}°C`}
-    </span>
-    <span className="block text-gray-500 capitalize">
-      {loading ? <Shimmer width="80px" height="16px" /> : hour.weather?.[0]?.main}
-    </span>
-  </div>
-));
+import { Shimmer } from "@/app/components/LoadingShimmer";
+import { HourlyForecastItem } from "@/app/components/HourlyForecast";
+import { ForecastItem } from "@/app/components/DailyForecast";
 
 const WeatherPage = () => {
   const searchParams = useSearchParams();
   const lat = searchParams.get("lat");
   const lon = searchParams.get("lon");
-
   const [weather, setWeather] = useState<any>(null);
-  const [status, setStatus] = useState<"loading" | "error" | "success">("loading");
-
+  const [status, setStatus] = useState<"loading" | "error" | "success">(
+    "loading"
+  );
   // Fetch Weather Data
   const fetchWeather = async () => {
     if (!lat || !lon) {
@@ -66,81 +33,130 @@ const WeatherPage = () => {
       setStatus("error");
     }
   };
-
   useEffect(() => {
     fetchWeather();
   }, [lat, lon]);
 
   if (status === "error") {
-    return <p className="text-center text-red-500 font-semibold">Failed to load weather data.</p>;
+    return (
+      <p className="text-center text-red-500 font-semibold">
+        Failed to load weather data.
+      </p>
+    );
   }
-
   const currentWeather = weather?.list?.[0] || {};
   const dailyForecast = weather?.list?.filter((_: any, index: number) => index % 8 === 0) || [];
-  const hourlyForecast = weather?.list?.slice(1, 8) || [];
+  const hourlyForecast = weather?.list?.slice(1, 7) || [];
 
   return (
-    <div className="h-screen w-full flex justify-center bg-white items-center">
+    <div className="lg:py-10 w-full flex justify-center bg-white items-center">
       <div className="lg:flex gap-2 justify-center items-center">
-      <div className="max-w-4xl mx-auto md:p-6 py-6 px-2 my-6 bg-neutral-50 shadow-md rounded-lg">
-        {/* Header */}
-        <div className="flex justify-between items-center border-b pb-4 mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">
-            {status === "loading" ? <Shimmer width="120px" height="24px" /> : weather?.city?.name || "Unknown Location"}
-          </h2>
-          <div className="text-lg font-medium text-gray-600">
-            {status === "loading" ? <Shimmer width="100px" height="24px" /> : new Date().toDateString()}
+        <div className="max-w-4xl mx-auto md:p-6 py-6 px-2  bg-neutral-50 h-screen shadow-md rounded-lg">
+          {/* Header */}
+          <div className="flex justify-between items-center border-b">
+            <h2 className="text-2xl font-bold text-gray-800">
+              {status === "loading" ? (
+                <Shimmer width="120px" height="24px" />
+              ) : (
+                weather?.city?.name || "Unknown Location"
+              )}
+            </h2>
+            <div className="text-lg font-medium text-gray-600">
+              {status === "loading" ? (
+                <Shimmer width="100px" height="24px" />
+              ) : (
+                new Date().toDateString()
+              )}
+            </div>
           </div>
-        </div>
+          {/* Current Weather Section */}
+          <div className="flex justify-between gap-4 items-center my-6">
+            <div className="text-center">
+              {status === "loading" ? (
+                <Shimmer width="128px" height="128px" />
+              ) : (
+                <img
+                  src={`https://openweathermap.org/img/wn/${currentWeather?.weather?.[0]?.icon}@2x.png`}
+                  alt="Weather Icon"
+                  className="w-32 h-32 mx-auto"
+                />
+              )}
+              <h1 className="md:text-6xl text-4xl mt-2 font-extrabold text-gray-900">
+                {status === "loading" ? (
+                  <Shimmer width="80px" height="48px" />
+                ) : (
+                  `${Math.round(currentWeather.main?.temp || 0)}°`
+                )}
+                <span className="text-[28px] font-normal">c</span>
+              </h1>
+              <span className="text-lg text-gray-600 capitalize">
+                {status === "loading" ? (
+                  <Shimmer width="120px" height="24px" />
+                ) : (
+                  currentWeather?.weather?.[0]?.description || "No Data"
+                )}
+              </span>
+            </div>
+            {/* Additional Weather Details */}
+            <div className="space-y-2">
+              <div className="text-lg text-gray-700">
+                <strong>Wind Speed:</strong>{" "}
+                {status === "loading" ? (
+                  <Shimmer width="60px" height="24px" />
+                ) : (
+                  `${currentWeather?.wind?.speed || 0} mph`
+                )}
+              </div>
+              <div className="text-lg text-gray-700">
+                <strong>Humidity:</strong>{" "}
+                {status === "loading" ? (
+                  <Shimmer width="60px" height="24px" />
+                ) : (
+                  `${currentWeather?.main?.humidity || 0}%`
+                )}
+              </div>
+              <div className="text-lg text-gray-700">
+                <strong>Feels Like:</strong>{" "}
+                {status === "loading" ? (
+                  <Shimmer width="60px" height="24px" />
+                ) : (
+                  `${Math.round(currentWeather.main?.feels_like || 0)}°`
+                )}
+              </div>
+            </div>
+          </div>
+          <h1 className=" text-2xl font-bold text-black my-2 text-center">
+            Hourly forecast
+          </h1>
 
-        {/* Current Weather Section */}
-        <div className="flex justify-between gap-4 items-center my-6">
-          <div className="text-center">
-            {status === "loading" ? <Shimmer width="128px" height="128px" /> : (
-              <img
-                src={`https://openweathermap.org/img/wn/${currentWeather?.weather?.[0]?.icon}@2x.png`}
-                alt="Weather Icon"
-                className="w-32 h-32 mx-auto"
+          {/* Hourly Forecast Section */}
+          <div className="lg:grid grid-cols-4 flex flex-wrap justify-between gap-2 text-center ">
+            {hourlyForecast.map((hour: any, index: number) => (
+              <HourlyForecastItem
+                key={index}
+                hour={hour}
+                loading={status === "loading"}
               />
-            )}
-            <h1 className="md:text-6xl text-4xl mt-2 font-extrabold text-gray-900">
-              {status === "loading" ? <Shimmer width="80px" height="48px" /> : `${Math.round(currentWeather.main?.temp || 0)}°`}
-              <span className="text-[28px] font-normal">c</span>
-            </h1>
-            <span className="text-lg text-gray-600 capitalize">
-              {status === "loading" ? <Shimmer width="120px" height="24px" /> : currentWeather?.weather?.[0]?.description || "No Data"}
-            </span>
-          </div>
-
-          {/* Additional Weather Details */}
-          <div className="space-y-2">
-            <div className="text-lg text-gray-700">
-              <strong>Wind Speed:</strong> {status === "loading" ? <Shimmer width="60px" height="24px" /> : `${currentWeather?.wind?.speed || 0} mph`}
-            </div>
-            <div className="text-lg text-gray-700">
-              <strong>Humidity:</strong> {status === "loading" ? <Shimmer width="60px" height="24px" /> : `${currentWeather?.main?.humidity || 0}%`}
-            </div>
+            ))}
           </div>
         </div>
+        <div className="block bg-white px-2 py-4">
+          <h1 className=" text-2xl font-bold text-green-300 my-2 text-center">
+            Weekly forecast
+          </h1>
 
-        {/* 5-Day Forecast Section */}
-        <div className="flex justify-between lg:gap-10 gap-2 flex-wrap w-full text-center">
-          {dailyForecast.map((day: any, index: number) => (
-            <ForecastItem key={index} day={day} loading={status === "loading"} />
-          ))}
+          {/* 5-Day Forecast Section */}
+          <div className="lg:grid grid-cols-1 flex justify-between lg:gap-5 gap-2 flex-wrap w-full text-center">
+            {dailyForecast.map((day: any, index: number) => (
+              <ForecastItem
+                key={index}
+                day={day}
+                loading={status === "loading"}
+              />
+            ))}
+          </div>
         </div>
       </div>
-        <div className="block bg-white px-2">
-        {/* Hourly Forecast Section */}
-        <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">Hourly Forecast (Next 24 Hours)</h3>
-        <div className="lg:grid grid-cols-3 flex flex-wrap justify-between gap-2 text-center ">
-          {hourlyForecast.map((hour: any, index: number) => (
-            <HourlyForecastItem key={index} hour={hour} loading={status === "loading"} />
-          ))}
-        </div>
-        </div>
-      </div>
-    
     </div>
   );
 };
