@@ -31,20 +31,21 @@ export async function GET() {
                 const forecastDate = new Date(forecastTimeUTC + " UTC");
 
                 // Get the user's timezone based on lat/lon using Intl.DateTimeFormat().resolvedOptions().timeZone
-                const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; 
-    
+                const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
                 // Format the time in the user's local timezone
                 const localTime = new Intl.DateTimeFormat("en-US", {
                     dateStyle: "full",
                     timeStyle: "short",
                     timeZone: userTimeZone
                 }).format(forecastDate);
-    
+                const unsubscribeLink = `${process.env.NEXT_PUBLIC_BASE_URL}/api/unsubscribe/${encodeURIComponent(email)}`;
+
 
                 await sendMail({
                     email: email,
                     subject: "Weather Notification Alert",
-                    message: `Hello, \n\nThis is to inform you that the weather forecast predicts ${description} (${weather}) on ${localTime} at your location.\n\nStay prepared! \n\nBest Regards,\nYour Weather Alert Team`
+                    message: `Hello, \n\nThis is to inform you that the weather forecast predicts ${description} (${weather}) on ${localTime} at your location.\n\nStay prepared! \n\nIf you no longer wish to receive these notifications, you can unsubscribe anytime by clicking the link below:\n\n[Unsubscribe](${unsubscribeLink})\n\nBest Regards,\nYour Weather Alert Team`
                 });
             }
         }
