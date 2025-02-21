@@ -114,7 +114,14 @@ export default function Home() {
         );
         setShowModal(false);
       return  toast.success(response.data.message);
-      } else {
+      }else if(response.data.message == "You have already subscribed to get notifications"){
+        localStorage.setItem(
+          "subscribedUser",
+          JSON.stringify({ email, weather, city: selectedCity.name })
+        );
+        setShowModal(false);
+      }
+       else {
       return  toast.error(response.data.message);
       }
     } catch (err) {
