@@ -51,7 +51,7 @@ const WeatherComponent = () => {
   return (
     <div className="lg:py-10 w-full flex justify-center bg-white items-center">
       <div className="lg:flex gap-2 justify-center items-center">
-        <div className="max-w-4xl mx-auto md:p-6 py-6 px-2  bg-neutral-50 h-screen shadow-md rounded-lg">
+        <div className="max-w-4xl mx-auto md:p-6 py-6 px-2  bg-neutral-50 h-screen  rounded-md" style={{backgroundImage:`url(/bg.jpeg)`}}>
           {/* Header */}
           <div className="flex justify-between items-center border-b">
             <h2 className="text-2xl font-bold text-gray-800">

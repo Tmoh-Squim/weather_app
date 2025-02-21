@@ -15,7 +15,7 @@ export const HourlyForecastItem = memo(
             })
           )}
         </span>
-        <span className="block text-lg font-bold text-gray-400">
+        <span className="block text-lg font-bold text-gray-700">
           {loading ? (
             <Shimmer width="40px" height="20px" />
           ) : (
@@ -23,7 +23,7 @@ export const HourlyForecastItem = memo(
           )}
           <span className="text-sm">C</span>
         </span>
-        <span className="block text-gray-500 capitalize">
+        <span className="block text-white capitalize">
           {loading ? (
             <Shimmer width="80px" height="16px" />
           ) : (
