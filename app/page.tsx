@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "./components/Loader";
-import { City } from "./types/types";
+import { City, validEmailRegex } from "./types/types";
 import { GEO_API_URL } from "./apis/apis";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -91,8 +91,11 @@ export default function Home() {
 
   const handleSubscribe = async () => {
     if (!email || !weather || !selectedCity) {
-      alert("Please fill in all fields.");
+      toast.info("Please fill in all fields.");
       return;
+    }
+    if(!email.match(validEmailRegex)){
+      toast.error("Invalid email address")
     }
 
     try {

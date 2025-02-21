@@ -1,3 +1,4 @@
+import { validEmailRegex } from "@/app/types/types";
 import { ConnectDB } from "@/server/config/Db";
 import Users from "@/server/models/users";
 import { NextResponse } from "next/server";
@@ -11,6 +12,12 @@ export async function POST(req:Request){
                 success:false,
                 message:"Email is required"
             })
+        }
+        if(!email.match(validEmailRegex)){
+            return NextResponse.json({
+                success:false,
+                message:"Invalid email address"
+            })  
         }
         if(!weather){
             return NextResponse.json({
