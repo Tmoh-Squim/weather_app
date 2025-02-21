@@ -4,7 +4,7 @@ import sendMail from "@/server/utils/SendEmailNotification";
 import { NextResponse } from "next/server";
 
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         await ConnectDB();
         const users = await Users.find();
@@ -37,7 +37,7 @@ export async function GET(req: Request) {
                 const localTime = new Intl.DateTimeFormat("en-US", {
                     dateStyle: "full",
                     timeStyle: "short",
-                    timeZone: userTimeZone // Uses the resolved timezone
+                    timeZone: userTimeZone
                 }).format(forecastDate);
     
 
