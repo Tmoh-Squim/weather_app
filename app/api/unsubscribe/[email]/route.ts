@@ -3,7 +3,7 @@ import Users from "@/server/models/users";
 import { NextResponse } from "next/server";
 
 
-export async function DELETE(req:Request,{params}:{params:{email:string}}){
+export async function DELETE({params}: { params: { email: string } }){
     try {
         const {email} = params;
          await ConnectDB();
