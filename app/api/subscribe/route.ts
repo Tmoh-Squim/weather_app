@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req:Request){
     try {
         const {email,weather,lat,lon} = await req.json();
+        await ConnectDB();
 
         if(!email){
             return NextResponse.json({
@@ -25,7 +26,6 @@ export async function POST(req:Request){
                 message:"Weather is required"
             })
         }
-        await ConnectDB();
         const existingEmail = await Users.findOne({email});
         if(existingEmail){
             return NextResponse.json({
