@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try {
         await ConnectDB();
-        const users = await Users.find()
+        const users = await Users.find();
         if (!users.length) {
             return NextResponse.json({
                 success: false,

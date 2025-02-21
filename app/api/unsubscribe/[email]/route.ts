@@ -2,15 +2,15 @@ import { ConnectDB } from "@/server/config/Db";
 import Users from "@/server/models/users";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, { params }: { params: { email: string } }) {
+export async function DELETE(req: NextRequest) {
     try {
-        const { email } = params; 
 
+        const email = req.nextUrl.pathname.split("/").pop(); 
         if (!email) {
             return NextResponse.json({
                 success: false,
-                message: "Email is required to unsubscribe."
-            });
+                message: "Email parameter is required."
+            }, { status: 400 });
         }
 
         await ConnectDB();
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, { params }: { params: { email: stri
             return NextResponse.json({
                 success: false,
                 message: "Email not found in our subscription list."
-            });
+            }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -33,6 +33,6 @@ export async function POST(req: NextRequest, { params }: { params: { email: stri
         return NextResponse.json({
             success: false,
             message: "Something went wrong."
-        });
+        }, { status: 500 });
     }
 }
