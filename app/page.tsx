@@ -202,7 +202,7 @@ export default function Home() {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold mb-4">Subscribe to Weather Alerts</h2>
-            <div className="text-center cursor-pointer" onClick={()=>{setShowModal(false)}}>
+            <div className="text-center cursor-pointer mb-3" onClick={()=>{setShowModal(false)}}>
               X
             </div>
             </div>
