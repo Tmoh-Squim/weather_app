@@ -30,7 +30,7 @@ export async function POST(req:Request){
         if(existingEmail){
             return NextResponse.json({
                 success:false,
-                message:"You have already subscribe to get notifications"
+                message:"You have already subscribed to get notifications"
             })
         }
         const newUser = {
