@@ -95,7 +95,7 @@ export default function Home() {
       return;
     }
     if(!email.match(validEmailRegex)){
-      toast.error("Invalid email address")
+     return toast.error("Invalid email address")
     }
 
     try {
