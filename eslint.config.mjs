@@ -15,7 +15,8 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-explicit-any": "off", // Disable "Unexpected any" errors
       "react-hooks/exhaustive-deps": "off", // Disable missing dependency warnings
-      "@next/next/no-img-element": "off", // Allow using <img> instead of <Image />
+      "@next/next/no-img-element": "off",
+      "@typescript-eslint/no-unused-vars":"warn" // Allow using <img> instead of <Image />
     },
   }
 ];

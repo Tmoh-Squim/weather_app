@@ -2,7 +2,8 @@ import { memo } from "react";
 import { Shimmer } from "./LoadingShimmer";
 
 export const ForecastItem = memo(
-    ({ day, loading }: { day: any; loading: boolean }) => (
+  function ForecastItem({ day, loading }: { day: any; loading: boolean }) {
+    return (
       <div className="p-4 w-[145px] border border-gray-300 rounded-lg shadow-sm">
         <span className="block text-teal-600 tracking-wider font-semibold">
           {loading ? (
@@ -30,5 +31,7 @@ export const ForecastItem = memo(
           )}
         </span>
       </div>
-    )
-  );
+    );
+  }
+);
+ForecastItem.displayName = "ForecastItem";
